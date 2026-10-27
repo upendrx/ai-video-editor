@@ -1,0 +1,11 @@
+# FFmpeg filter chain preset: standard  (16:9 phone footage)
+# Run from the repository root so the relative LUT path resolves:
+#   ./color-grading/preprocess.sh --preset standard <clip>
+#
+# Why this chain:
+#   - NO grayworld auto white balance: with a big colored object in frame (e.g. a teal curtain) it assumes the
+#     scene averages grey and pushes skin toward pink/grey. Lock white balance on the phone instead (5000-5600 K).
+#   - fps=30 + scale to at most 1920 wide (never upscales): phone 4K clips become 1080p, which keeps long videos small
+#     and is sharper than a native 1080p capture; constant frame rate keeps cuts in sync.
+#   - light denoise (hqdn3d 3:2:5:3.5), gentle eq, soft LUT blended at 50%, light sharpen.
+fps=30,scale='min(1920,iw)':-2:flags=lanczos,hqdn3d=3:2:5:3.5,eq=brightness=0.01:contrast=1.04:saturation=1.06:gamma=0.98,split[a][b];[b]lut3d=file=color-grading/luts/soft.cube[c];[a][c]blend=all_opacity=0.5,unsharp=5:5:0.5:5:5:0.0

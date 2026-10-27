@@ -1,0 +1,5 @@
+numpy
+Pillow
+rapidfuzz
+num2words
+opencv-python  # optional, only for color-grading/analyze-color.py
