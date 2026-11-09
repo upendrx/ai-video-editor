@@ -1,0 +1,5 @@
+# FFmpeg filter chain preset: ep008-studio-red (white wall + red lamp, phone "pro" mode footage about one stop under)
+# Measured on cam-01: face Y 92, wall Y 144. This lifts the face to ~118 without flattening it.
+#   - mild crop (90 %, speaker right of centre) from the 4K frame before the 1920 scale: no upscaling
+#   - NO denoise (keeps skin and fabric texture), gamma lift + a touch of contrast, tiny warm shift, light sharpen
+fps=30,crop=iw*0.9:ih*0.9:iw*0.1:ih*0.02,scale=1920:-2:flags=lanczos,eq=gamma=1.26:contrast=1.06:saturation=1.05:brightness=0.015,colorbalance=rm=0.015:bm=-0.015,unsharp=5:5:0.35:5:5:0.0

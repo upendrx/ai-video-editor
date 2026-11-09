@@ -1,0 +1,43 @@
+# Spelling reference for captions and on-screen text. Check the transcript against this list for every episode.
+Rust
+PyO3
+maturin
+Tiktoken
+Tokenizers
+Hugging Face
+Safetensors
+Candle
+Burn
+Mistral.rs
+Text Generation Inference
+TGI
+Qdrant
+LanceDB
+Polars
+Pydantic
+pydantic-core
+Apache Arrow
+Rayon
+HNSW
+SIMD
+GIL
+CUDA
+Metal
+WebAssembly
+WebGPU
+GGUF
+PyTorch
+vLLM
+SGLang
+pgvector
+RAG
+LLM
+BPE
+Cargo
+rustc
+JFrog
+Trail of Bits
+NumPy
+Chromium
+AddressSanitizer
+libtorch

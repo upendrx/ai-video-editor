@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Replace a green-screen background with a studio background (free: FFmpeg chromakey + despill).
+"""Replace a green-screen background with the series studio background (free: FFmpeg chromakey + despill).
 
   python3 tools/key_green.py IN.mp4 OUT.mp4 [--bg image.png] [--sim 0.14] [--blend 0.06] [--preview]
 
 The key colour is sampled from the frame corners (so uneven or slightly yellow-green screens still key).
 --preview writes OUT as a single PNG frame at 5 s so you can check edges before keying the whole take.
-Order of work: sync audio -> key_green.py -> grade (preprocess.sh) -> your editor. Original footage is never modified.
+Order of work: sync audio -> key_green.py -> grade (preprocess.sh) -> AI Producer. Original footage is never modified.
 Needs: ffmpeg, numpy, Pillow.
 """
 import argparse, subprocess, sys, tempfile
@@ -13,7 +13,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-DEFAULT_BG = Path("studio-bg.png")  # generated on first run if missing
+HERE = Path(__file__).resolve().parent.parent
+DEFAULT_BG = HERE / "series/rust-in-ai/kit/studio-bg.png"
 
 
 def probe(path):

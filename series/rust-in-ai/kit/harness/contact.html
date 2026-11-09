@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><title>kit contact sheet</title>
+<style>body{margin:0;background:#000;display:grid;grid-template-columns:repeat(3,640px);gap:6px}
+.f{width:640px;height:360px;overflow:hidden;position:relative}
+iframe{width:1920px;height:1080px;border:0;transform:scale(.3333);transform-origin:0 0}
+.l{position:absolute;left:6px;bottom:4px;color:#ffa726;font:12px monospace;z-index:2}</style></head><body>
+<script>
+const spec = new URLSearchParams(location.search).get('spec');
+const base = spec.replace(/[^/]+$/, '');
+fetch(spec).then(r => r.json()).then(d => d.moments.forEach(m => {
+  const id = 'm-' + m.id.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  const t = (m.view != null ? m.view : Math.max(m.duration - 0.6, 0.1));
+  const f = document.createElement('div'); f.className = 'f';
+  f.innerHTML = `<iframe src="preview.html?c=${base}demo/compositions/${id}.html&t=${t}"></iframe><div class="l">${m.type} @${t}s</div>`;
+  document.body.appendChild(f);
+}));
+</script></body></html>

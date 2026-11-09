@@ -11,22 +11,22 @@ color-grading/
 ├── analyze-color.py     ← Python auto-white-balance analyzer
 ├── luts/                ← .cube LUT files
 │   ├── clean-neutral.cube
-│   └── soft.cube
+│   └── series-soft.cube
 └── presets/             ← named FFmpeg filter chains
-    └── standard.txt
+    └── series-standard.txt
 ```
 
 ## Quick start
 
 ```bash
-# Default preset: gentle grade, no auto white balance, downscale to <=1080p
-./color-grading/preprocess.sh --preset standard footage/take01.mov
+# Series default (Rust in AI): gentle grade, no auto white balance, downscale to <=1080p
+./color-grading/preprocess.sh --preset series-standard videos/002-rust-ai-ep1-overview/02-raw/talking-head/ep1_take01.mov
 
 # Preprocess a single clip (auto white balance + denoise + LUT + sharpen)
-./color-grading/preprocess.sh footage/take01.mov
+./color-grading/preprocess.sh videos/001-rust-ownership/02-raw/talking-head/take01.mov
 
 # Preprocess all clips in a video folder
-./color-grading/preprocess.sh footage/
+./color-grading/preprocess.sh videos/001-rust-ownership/02-raw/talking-head/
 
 # Use a specific LUT
 ./color-grading/preprocess.sh --lut color-grading/luts/clean-neutral.cube take01.mov
@@ -35,7 +35,7 @@ color-grading/
 ./color-grading/preprocess.sh --no-lut take01.mov
 
 # Analyze a clip's color balance (requires Python + OpenCV)
-python3 color-grading/analyze-color.py footage/take01.mov
+python3 color-grading/analyze-color.py videos/001-rust-ownership/02-raw/talking-head/take01.mov
 ```
 
 ## What the preprocessing does
@@ -52,7 +52,7 @@ The pipeline runs **five steps** in order:
 
 ## Generated LUTs
 
-`python3 color-grading/make-luts.py` writes `soft.cube`, `clean-neutral.cube` and `moody-teal-orange.cube` (no downloads).
+`python3 color-grading/make-luts.py` writes `series-soft.cube`, `clean-neutral.cube` and `moody-teal-orange.cube` (no downloads).
 
 ## Adding custom LUTs
 
@@ -69,7 +69,7 @@ For talking head videos, LUTs are blended at **60% intensity** by default to pre
 
 ## Requirements
 
-- **FFmpeg**
+- **FFmpeg** (already installed)
 - **Python 3 + OpenCV** (optional, for `analyze-color.py`)
   ```bash
   pip install opencv-python numpy

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Replace a video's audio with a separately recorded (better) mic track, aligned automatically.
 
-Use when the picture comes from the phone and the voice from a mic recorded on a computer.
+Use when the picture comes from the phone and the voice from a mic recorded on the Mac.
 Both recordings must contain the same speech (the phone's own mic audio is the reference).
 
   python3 tools/sync_audio.py PHONE_VIDEO MIC_AUDIO OUT.mp4
   python3 tools/sync_audio.py PHONE_VIDEO MIC_AUDIO --report      # only print the measured offset
 
 How it works: both tracks are band-passed to the speech range, cross-correlated with an FFT to find the offset,
-and re-checked near the end of the recording to catch clock drift (phone and computer clocks differ by a few
+and re-checked near the end of the recording to catch clock drift (phone and Mac clocks differ by a few
 milliseconds per minute). A tiny `atempo` correction is applied only if the drift is large enough to matter.
 The video stream is copied untouched. Needs: ffmpeg, numpy.
 """

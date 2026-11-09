@@ -1,0 +1,24 @@
+{"moments": [
+ {"id": "intro", "type": "title_card", "start": 0.3, "duration": 4.5, "kicker": "Rust in AI · Episode 1", "title": "Python Is the Steering Wheel, Rust Is the Engine", "sub": "Tokenizers · Safetensors · Candle · Qdrant"},
+ {"id": "layers", "type": "layers", "start": 5, "duration": 12, "layers": [
+   {"name": "Layer 1", "sub": "Tokenization, validation, data prep", "tools": "Tokenizers · Tiktoken · Polars · Pydantic-core"},
+   {"name": "Layer 2", "sub": "Safe model weights", "tools": "Safetensors"},
+   {"name": "Layer 3", "sub": "Inference and deep learning", "tools": "Candle · Burn · Mistral.rs"},
+   {"name": "Layer 4", "sub": "Vector search and RAG", "tools": "Qdrant · LanceDB"}],
+  "highlight": [{"index": 0, "at": 2}, {"index": 1, "at": 4.5}, {"index": 2, "at": 7}, {"index": 3, "at": 9.5}]},
+ {"id": "cards", "type": "chip_cards", "start": 18, "duration": 8, "heading": "Rust under the hood", "items": [
+   {"name": "Tokenizers", "role": "Parallel text tokenization", "tag": "Hugging Face", "at": 1.0},
+   {"name": "Tiktoken", "role": "Fast BPE tokenizer", "tag": "OpenAI", "at": 1.6},
+   {"name": "Polars", "role": "Multithreaded DataFrames", "tag": "Data prep", "at": 2.2},
+   {"name": "Pydantic-core", "role": "Structured output validation", "tag": "Validation", "at": 2.8}]},
+ {"id": "vs", "type": "compare", "start": 27, "duration": 7, "left": {"title": "Pickle .bin", "tone": "bad", "items": ["Slow to load", "Can run arbitrary code", "Unsafe to share"]}, "right": {"title": "Safetensors", "tone": "good", "items": ["Memory-mapped loading", "No code execution", "Rust bounds checking"]}, "at_left": 0.4, "at_right": 2.4},
+ {"id": "code", "type": "code_card", "start": 35, "duration": 6, "file": "main.rs", "lang": "rust", "lines": [
+   {"t": "let a = String::from(\"hi\");", "at": 0.4}, {"t": "let b = a;", "at": 1.4}, {"t": "println!(\"{}\", a); // error[E0382]", "at": 2.4, "err": true, "flag": 3.2}]},
+ {"id": "flow", "type": "flow", "start": 42, "duration": 6, "nodes": [
+   {"label": "Python API", "sub": "your code", "at": 0.5}, {"label": "PyO3", "sub": "bridge", "at": 1.4}, {"label": "Rust core", "sub": "native speed", "tone": "good", "at": 2.3}]},
+ {"id": "rules", "type": "checklist", "start": 49, "duration": 7, "items": [
+   {"text": "Prototype and train in Python", "sub": "Using Rust-backed libraries", "at": 0.6}, {"text": "Wrap CPU bottlenecks with PyO3", "sub": "Batch across the boundary", "at": 1.8}, {"text": "Ship inference and RAG in Rust", "sub": "Candle · Mistral.rs · Qdrant", "at": 3.0}]},
+ {"id": "size", "type": "stat_compare", "start": 57, "duration": 5, "left": {"value": "10 GB", "label": "Python container", "sub": "CUDA + deps"}, "right": {"value": "15 MB", "label": "Rust binary", "sub": "single file"}},
+ {"id": "next", "type": "outro_next", "start": 63, "duration": 5, "kicker": "Next episode", "title": "Episode 2: The Hidden Rust Layer Inside Your Python AI Stack"},
+ {"id": "tok", "type": "lower_third", "start": 69, "duration": 4, "title": "Hugging Face Tokenizers", "sub": "github.com/huggingface/tokenizers"}
+]}

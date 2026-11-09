@@ -1,13 +1,57 @@
-.DS_Store
-__pycache__/
-*.pyc
-venv/
-.venv/
+# Whitelist: only reusable, open-source parts of the workflow are tracked.
+# Personal footage, audio, photos, scripts, plans and analytics stay local.
+/*
+!/.gitignore
+!/README.md
+!/STYLE.md
+!/CLAUDE.md
+!/AGENTS.md
+!/BEST-USE-OF-AI.md
+!/LICENSE
+!/tools/
+!/color-grading/
+!/series/
+!/templates/
+!/studio/
+!/.claude/
+!/planning/
+!/videos/
+
+# planning: only the generic playbooks
+/planning/*
+!/planning/README.md
+!/planning/PLAYBOOK-TREND-VIDEO.md
+!/planning/MODEL-TIERS.md
+
+# videos: only the reusable recording template and proof-capture script
+/videos/*
+!/videos/007-rust-ai-elon-was-right/
+/videos/007-rust-ai-elon-was-right/*
+!/videos/007-rust-ai-elon-was-right/RECORD-STEPS.md
+!/videos/007-rust-ai-elon-was-right/03-edit/
+/videos/007-rust-ai-elon-was-right/03-edit/*
+!/videos/007-rust-ai-elon-was-right/03-edit/capture_proof.js
+
+# never track media or local state anywhere
 *.mp4
 *.mov
 *.m4a
 *.wav
+!/series/rust-in-ai/kit/sfx/*.wav
 *.mp3
 *.mkv
-*.json
-!package.json
+*.aifc
+*.jpg
+.DS_Store
+venv/
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+*.log
+.claude/settings.local.json
+color-grading/presets/_ep-*.txt
+studio/data/
+studio/dist/
+series/rust-in-ai/RECORD-TONIGHT.html
+!/requirements.txt

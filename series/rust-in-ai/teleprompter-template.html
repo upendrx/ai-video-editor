@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>__TITLE__</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;color:#fff;font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+  #bar{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:8px;background:#111e;font-size:15px}
+  #bar button{font-size:16px;padding:8px 14px;border-radius:8px;border:0;background:#2d6cdf;color:#fff;cursor:pointer}
+  #bar button.alt{background:#333}
+  #bar span.v{min-width:3ch;display:inline-block;text-align:center}
+  #prog{position:fixed;top:0;left:0;height:4px;width:0;background:#ffa726;z-index:6}
+  #stage{height:100%;overflow-y:scroll;scrollbar-width:none}
+  #stage::-webkit-scrollbar{display:none}
+  #text{max-width:980px;margin:0 auto;padding:44vh 28px 70vh;text-align:center;font-weight:700;line-height:1.38}
+  .line{margin:0 0 .75em}
+  .gap{height:1.1em}
+  .vis{font-size:.3em;color:#9fc2bf;background:#ffa72614;border:1px dashed #ffa72666;border-radius:8px;padding:.5em .8em;margin:0 0 .8em;text-align:left}
+  .ctx{font-size:.34em;color:#5f7f7c;font-style:italic;text-align:left;margin:.2em 0 .5em;padding-left:.6em;border-left:4px solid #2a3f3e}
+  .vis::before{content:"GRAPHIC ON SCREEN · ";color:#ffa726;font-weight:600;letter-spacing:.08em}
+  .sec{margin:1.6em 0 .9em;font-size:.38em;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#ffa726;border-top:1px solid #ffa72655;padding-top:.8em}
+  .line.cam{color:#fff;border-left:10px solid #3ddc97;padding-left:.5em;text-align:left}
+  .line.read{color:#9fc2bf;font-size:.78em;font-weight:500;border-left:10px solid #6aa9ff;padding-left:.7em;text-align:left}
+  .tag{display:block;font-size:.4em;font-weight:800;letter-spacing:.14em;margin-bottom:.25em}
+  .cam .tag{color:#3ddc97}.read .tag{color:#6aa9ff}
+  .line.done{color:#555!important}
+  #guide{position:fixed;left:0;right:0;top:41%;height:0;border-top:2px solid #ff4d4d55;pointer-events:none}
+  #info{position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:13px;color:#888;z-index:5;background:#000d;padding:5px 8px}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="bar">
+  <button id="play">Start (Space)</button>
+  <button id="restart" class="alt">Restart</button>
+  Size <button id="smaller" class="alt">A-</button><span class="v" id="sz"></span><button id="bigger" class="alt">A+</button>
+  Speed <button id="slower" class="alt">-</button><span class="v" id="sp"></span><button id="faster" class="alt">+</button>
+  <label><input type="checkbox" id="mirror"> Mirror</label>
+  <span style="color:#3ddc97">■ camera</span> <span style="color:#6aa9ff">■ read</span>
+</div>
+<div id="guide"></div>
+<div id="stage"><div id="text"></div></div>
+<div id="info"></div>
+<script>
+const TITLE = __TITLE_JSON__;
+const WORDS_PER_MIN = 150;
+const LINES = __LINES_JSON__;
+const $ = id => document.getElementById(id);
+const stage = $("stage"), text = $("text");
+let size = 52, speed = 3, running = false, pos = 0, last = 0;
+function load(k,d){try{const v=localStorage.getItem(k);return v===null?d:Number(v)}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+size = load("tp_size", size); speed = load("tp_speed", speed);
+let words = 0;
+for (const l of LINES) {
+  const d = document.createElement("div");
+  if (l.t === "sec") { d.className = "sec"; d.textContent = l.x; }
+  else if (l.t === "gap") { d.className = "gap"; }
+  else if (l.t === "vis") { d.className = "vis"; d.textContent = l.x; }
+  else if (l.t === "ctx") { d.className = "ctx"; d.textContent = l.x; }
+  else { d.className = "line" + (l.m ? " " + l.m : "");
+    if (l.m) { const g = document.createElement("span"); g.className = "tag"; g.textContent = l.m === "cam" ? "LOOK AT THE LENS · PROMPTER SITS UNDER IT" : "READ FROM SCREEN · VOICE-OVER, EYES CAN MOVE"; d.appendChild(g); }
+    d.appendChild(document.createTextNode(l.x)); words += l.x.split(/\s+/).filter(Boolean).length; }
+  text.appendChild(d);
+}
+$("info").textContent = TITLE + " · " + words + " words · about " + (words / WORDS_PER_MIN).toFixed(1) + " min at a natural pace";
+function apply(){ text.style.fontSize = size + "px"; $("sz").textContent = size; $("sp").textContent = speed; save("tp_size", size); save("tp_speed", speed); }
+function tick(t){
+  if (running) {
+    const dt = last ? (t - last) / 1000 : 0;
+    pos += speed * 12 * dt; stage.scrollTop = pos;
+    const mark = stage.scrollTop + innerHeight * 0.41;
+    document.querySelectorAll(".line").forEach(el => el.classList.toggle("done", el.offsetTop + el.offsetHeight < mark - 10));
+    const max = stage.scrollHeight - stage.clientHeight;
+    $("prog").style.width = (100 * stage.scrollTop / Math.max(1, max)) + "%";
+    if (stage.scrollTop >= max - 2) toggle(false);
+  }
+  last = t; requestAnimationFrame(tick);
+}
+function toggle(on){ running = on === undefined ? !running : on; $("play").textContent = running ? "Pause (Space)" : "Start (Space)"; if (running) pos = stage.scrollTop; }
+$("play").onclick = () => toggle();
+$("restart").onclick = () => { toggle(false); pos = 0; stage.scrollTop = 0; $("prog").style.width = 0; document.querySelectorAll(".line").forEach(e => e.classList.remove("done")); };
+$("bigger").onclick = () => { size = Math.min(120, size + 4); apply(); };
+$("smaller").onclick = () => { size = Math.max(28, size - 4); apply(); };
+$("faster").onclick = () => { speed = Math.min(12, speed + 1); apply(); };
+$("slower").onclick = () => { speed = Math.max(1, speed - 1); apply(); };
+$("mirror").onchange = e => { text.style.transform = e.target.checked ? "scaleX(-1)" : "none"; };
+addEventListener("keydown", e => {
+  if (e.code === "Space") { e.preventDefault(); toggle(); }
+  if (e.code === "ArrowUp") { speed = Math.min(12, speed + 1); apply(); }
+  if (e.code === "ArrowDown") { speed = Math.max(1, speed - 1); apply(); }
+});
+stage.addEventListener("wheel", () => { pos = stage.scrollTop; });
+stage.addEventListener("touchstart", () => { pos = stage.scrollTop; });
+apply(); requestAnimationFrame(tick);
+</script>
+</body>
+</html>

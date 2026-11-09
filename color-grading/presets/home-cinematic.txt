@@ -1,0 +1,9 @@
+# FFmpeg filter chain preset: home-cinematic  (low-key home studio look, phone footage)
+# Reference: George Alexander "If nobody watches your videos, do this." (Nov 2026). Measured on his talking-head
+# frames: frame luma ~76/255, low overall saturation, cool background, warm saturated skin, soft vignette.
+# Works only if the SET is right (see series/rust-in-ai/HOME-CINEMATIC-SETUP.md): background darker than the face,
+# soft side key light, warm practical lamp behind. A grade cannot darken a bright flat wall on its own.
+#   - fps 30, downscale to <=1920 (no upscaling), very light denoise (keeps skin texture)
+#   - home-film LUT at 70 %: mutes non-skin colours, cool shadows, warm highlights, soft highlight roll-off
+#   - soft vignette pulls the eye to the face; light sharpen
+fps=30,scale='min(1920,iw)':-2:flags=lanczos,hqdn3d=2:1.5:3:2.5,eq=contrast=1.02,split[a][b];[b]lut3d=file=color-grading/luts/home-film.cube[c];[a][c]blend=all_opacity=0.7,vignette=angle=PI/6:mode=forward,unsharp=5:5:0.4:5:5:0.0

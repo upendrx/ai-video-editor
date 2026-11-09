@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# preprocess.sh — Video preprocessing pipeline for the video toolkit
+# preprocess.sh — Video preprocessing pipeline for the video-editing-agent
 #
 # Auto white balance → Denoise → Color correct → Cinematic LUT → Sharpen
 #
@@ -22,9 +22,9 @@
 #
 # Examples:
 #   ./color-grading/preprocess.sh take01.mov
-#   ./color-grading/preprocess.sh --lut luts/clean-neutral.cube footage/
+#   ./color-grading/preprocess.sh --lut luts/clean-neutral.cube videos/001/02-raw/talking-head/
 #   ./color-grading/preprocess.sh --no-lut --no-sharpen take01.mov
-#   ./color-grading/preprocess.sh --preset standard take01.mov
+#   ./color-grading/preprocess.sh --preset series-standard take01.mov
 # =============================================================================
 
 set -euo pipefail
@@ -34,7 +34,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-DEFAULT_LUT="$SCRIPT_DIR/luts/soft.cube"
+DEFAULT_LUT="$SCRIPT_DIR/luts/series-soft.cube"
 LUT_INTENSITY=0.6
 SUFFIX="_graded"
 OUTDIR=""
@@ -45,7 +45,7 @@ DO_AWB=true
 DO_DENOISE=true
 DO_LUT=true
 DO_SHARPEN=true
-USE_PRESET="standard"   # default: gentle grade, no auto white balance
+USE_PRESET="series-standard"   # default: gentle series grade, no auto white balance
 
 # ─── FFmpeg tuning parameters ────────────────────────────────────────────────
 
